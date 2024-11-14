@@ -67,35 +67,34 @@ export function AppSidebar() {
     {
       title: "Invoices",
       icon: Files,
-      url: "/",
+      url: "/invoices",
     },
   ];
   const projects = [
     {
       title: "Axs ict website",
-      projectId: "/",
+      projectId: "129301283",
     },
     {
       title: "KeepUp front-end",
 
-      projectId: "/companies",
+      projectId: "129301283",
     },
     {
       title: "New vacancy AXS ict",
-
-      projectId: "/companies",
+      projectId: "129301283",
     },
   ];
   const tasks = [
     {
       title: "Front-end aanpassen",
-      projectId: "/",
+      projectId: "129301283",
       taskId: "someId",
       projectName: "Axs ict website",
     },
     {
       title: "Vacature veranderen",
-      projectId: "/companies",
+      projectId: "129301283",
       taskId: "someId",
       projectName: "Axs ict website",
     },
@@ -103,7 +102,7 @@ export function AppSidebar() {
       title: "Contact formulier aanpassen",
       taskId: "someId",
       projectName: "Axs ict website",
-      projectId: "/companies",
+      projectId: "129301283",
     },
   ];
 
@@ -180,10 +179,11 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {tasks.map((item) => (
-                <SidebarMenuItem key={item.title} className="h-10">
+                <SidebarMenuItem key={item.title} className="h-12">
                   <SidebarMenuButton asChild>
                     <Link
                       href={`/projects/${item.projectId}/tasks/${item.taskId}`}
+                      className="h-full py-4"
                     >
                       <div className="flex flex-col w-full">
                         <span className="text-sm">
