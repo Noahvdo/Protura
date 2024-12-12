@@ -35,6 +35,8 @@ import SidebarProfileBadge from "./sidebar-profile-badge";
 import ProfileBadge from "../profile/profile-badge";
 import { alterStringLength } from "@/lib/utils";
 import SidebarHeaderContent from "./sidebar-header";
+import { RecentProjectSidebarItem } from "@/lib/types/sidebar";
+import { SidebarText, SidebarTooltip } from "./sidebar-utils";
 
 export function AppSidebar() {
   const items = [
@@ -70,19 +72,21 @@ export function AppSidebar() {
       url: "/invoices",
     },
   ];
-  const projects = [
+  const projects: RecentProjectSidebarItem[] = [
     {
       title: "Axs ict website",
       projectId: "129301283",
+      projectNumber: 3,
     },
     {
       title: "KeepUp front-end",
-
       projectId: "129301283",
+      projectNumber: 1,
     },
     {
       title: "New vacancy AXS ict",
       projectId: "129301283",
+      projectNumber: 43,
     },
   ];
   const tasks = [
@@ -140,23 +144,27 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                  {item.itemCount && item.itemCount > 0 && (
-                    <SidebarMenuBadge>{item.itemCount}</SidebarMenuBadge>
-                  )}
-                </SidebarMenuItem>
+                <SidebarTooltip tooltipText={item.title} key={item.title}>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {item.itemCount && item.itemCount > 0 && (
+                      <SidebarMenuBadge>{item.itemCount}</SidebarMenuBadge>
+                    )}
+                  </SidebarMenuItem>
+                </SidebarTooltip>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Recent projects</SidebarGroupLabel>
+        <SidebarGroup className="mt-2">
+          <SidebarGroupLabel>
+            <SidebarText>Recent projects</SidebarText>
+          </SidebarGroupLabel>
           <SidebarGroupAction title="Add Project">
             <Plus /> <span className="sr-only">Add Project</span>
           </SidebarGroupAction>
@@ -166,7 +174,10 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={`/projects/${item.projectId}`}>
-                      <span>{item.title}</span>
+                      <SidebarText>
+                        #{item.projectNumber}{" "}
+                        {alterStringLength(item.title, 20)}
+                      </SidebarText>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -185,14 +196,16 @@ export function AppSidebar() {
                       href={`/projects/${item.projectId}/tasks/${item.taskId}`}
                       className="h-full py-4"
                     >
-                      <div className="flex flex-col w-full">
-                        <span className="text-sm">
-                          {alterStringLength(item.title, 24)}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {item.projectName}
-                        </span>
-                      </div>
+                      <SidebarText>
+                        <div className="flex flex-col w-full">
+                          <span className="text-sm">
+                            {alterStringLength(item.title, 24)}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {item.projectName}
+                          </span>
+                        </div>
+                      </SidebarText>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
