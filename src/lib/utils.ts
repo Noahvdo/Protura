@@ -11,3 +11,8 @@ export const alterStringLength = (str: string, length: number) => {
   }
   return str;
 };
+
+export const sameDay = (a: Date, b: Date) =>
+  a.getFullYear() === b.getFullYear() &&
+  a.getMonth() === b.getMonth() &&
+  a.getDate() === b.getDate();

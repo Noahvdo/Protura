@@ -34,7 +34,7 @@ export default async function RootLayout({
           <div className="w-full">
             <div className="grid grid-rows-[var(--header-height)_auto] h-screen">
               <Header />
-              <main className="h-full p-4">{children}</main>
+              <main className="h-full">{children}</main>
             </div>
           </div>
         </SidebarProvider>

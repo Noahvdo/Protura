@@ -21,10 +21,6 @@ export function Combobox({
   const [value, setValue] = React.useState("");
   const [id, setId] = React.useState("");
 
-  React.useEffect(() => {
-    if (id) console.log(id);
-  }, [id]);
-
   return (
     <Command>
       <CommandInput placeholder="Search organization..." />
