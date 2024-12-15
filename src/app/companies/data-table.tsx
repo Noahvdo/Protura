@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import * as React from "react";
 
@@ -29,6 +28,18 @@ import { SearchInput } from "@/components/ui/search-input";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { DatePicker, DatePickerWithRange } from "@/components/ui/date-picker";
+import { Plus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import Container from "@/components/ui/container";
+import Link from "next/link";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,7 +77,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex gap-4 p-4 items-center justify-between">
+      <Container className="flex gap-4 py-4 items-center justify-between">
         <div className="flex items-center gap-1">
           <Tabs
             defaultValue="name"
@@ -88,7 +99,7 @@ export function DataTable<TData, TValue>({
           </Tabs>
           <div className="max-w-sm">
             <SearchInput
-              placeholder="Search..."
+              placeholder="Search"
               value={(search.value as string) ?? ""}
               onChange={(event) => {
                 setSearch((search) => ({
@@ -144,8 +155,14 @@ export function DataTable<TData, TValue>({
               }
             ></DatePickerWithRange>
           </div>
+
+          <Button asChild>
+            <Link href="/companies/new">
+              <Plus /> Create company
+            </Link>
+          </Button>
         </div>
-      </div>
+      </Container>
       <div className="border-t border-b">
         <Table>
           <TableHeader>

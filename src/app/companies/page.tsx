@@ -9,7 +9,7 @@ export default async function Page() {
   ).then((res) => res.json());
 
   return (
-    <div className="py-10">
+    <div>
       <DataTable columns={columns} data={companies} />
     </div>
   );

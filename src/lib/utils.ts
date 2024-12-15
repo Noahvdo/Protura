@@ -16,3 +16,7 @@ export const sameDay = (a: Date, b: Date) =>
   a.getFullYear() === b.getFullYear() &&
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
+
+export const generateCompanyNo = () => {
+  return Math.floor(Math.random() * 1000000).toString();
+};

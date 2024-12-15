@@ -5,7 +5,7 @@ import { cn, sameDay } from "@/lib/utils";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import parsePhoneNumber from "libphonenumber-js";
 
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, Delete, MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/tooltip";
 import React from "react";
 import { DateRange } from "react-day-picker";
+import { deleteCompany } from "@/lib/actions/company/delete";
 
 const exactMatchFilterFn = (
   row: Row<Company>,
@@ -198,6 +199,13 @@ export const columns: ColumnDef<Company>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>View company</DropdownMenuItem>
             <DropdownMenuItem>View manager</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="focus:bg-destructive focus:text-destructive-foreground"
+              onClick={() => deleteCompany(company.id)}
+            >
+              <Delete className="rotate-180" /> Delete company
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

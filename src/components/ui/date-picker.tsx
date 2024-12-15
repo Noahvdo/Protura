@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { DateRange } from "react-day-picker";
+import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
 export function DatePicker() {
   const [date, setDate] = React.useState<Date>();
@@ -57,10 +58,7 @@ export function DatePickerWithRange({
 }: React.HTMLAttributes<HTMLDivElement> & {
   onDateChange?: (date: DateRange | undefined) => void;
 }) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 20),
-  });
+  const [date, setDate] = React.useState<DateRange | undefined>(undefined);
 
   const handleSelect = (selected: DateRange | undefined) => {
     setDate(selected);
@@ -102,7 +100,18 @@ export function DatePickerWithRange({
             selected={date}
             onSelect={handleSelect}
             numberOfMonths={2}
+            disabled={{ after: new Date() }}
           />
+          <div className="flex items-center gap-2 px-4 pb-4">
+            <ToggleGroup type="single">
+              <ToggleGroupItem value="this-year">This year</ToggleGroupItem>
+              <ToggleGroupItem value="last-6-months">
+                Last 6 months
+              </ToggleGroupItem>
+              <ToggleGroupItem value="last-month">Last month</ToggleGroupItem>
+              <ToggleGroupItem value="last-week">Last week</ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </PopoverContent>
       </Popover>
     </div>
