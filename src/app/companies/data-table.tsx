@@ -27,29 +27,19 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SearchInput } from "@/components/ui/search-input";
 import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { DatePicker, DatePickerWithRange } from "@/components/ui/date-picker";
+import { DatePickerWithRange } from "@/components/ui/date-picker";
 import { Plus } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import Container from "@/components/ui/container";
 import Link from "next/link";
+import { Company } from "@/lib/types/company";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function DataTable({ columns, data }: DataTableProps<Company, Company>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -60,6 +50,8 @@ export function DataTable<TData, TValue>({
     column: "name",
   });
 
+  const router = useRouter();
+
   const table = useReactTable({
     data,
     columns,
@@ -69,6 +61,7 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getRowId: (originalRow) => originalRow.id,
     state: {
       sorting,
       columnFilters,
@@ -188,7 +181,9 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
+                  className="cursor-pointer hover:bg-muted" // make it obvious it’s clickable
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => router.push(`/companies/${row.id}`)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

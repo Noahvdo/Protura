@@ -8,7 +8,6 @@ import { redirect } from "next/navigation";
 export const createCompany = async (currentState: any, formData: unknown) => {
   if (formData instanceof FormData) {
     const organizationId = await getOrganizationId();
-    console.log(formData);
 
     const companyBody = {
       name: formData.get("name"),
@@ -28,6 +27,8 @@ export const createCompany = async (currentState: any, formData: unknown) => {
       throw new Error("formdata is invalid");
     }
 
+    const { status, ...rest } = companyBody;
+
     const response = await fetch(`http://localhost:8080/companies`, {
       method: "POST",
       headers: {
@@ -35,7 +36,8 @@ export const createCompany = async (currentState: any, formData: unknown) => {
       },
       body: JSON.stringify({
         organizationId: organizationId,
-        ...companyBody,
+        status: status?.toString().toUpperCase(),
+        ...rest,
       }),
     });
 
@@ -45,7 +47,7 @@ export const createCompany = async (currentState: any, formData: unknown) => {
       revalidatePath("/companies");
       redirect(`/companies`);
     } else {
-      throw new Error(await response.text());
+      return { error: "Failed to create company" };
     }
   }
 };

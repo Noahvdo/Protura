@@ -55,7 +55,6 @@ const CreateCompanyForm: React.FC<
   return (
     <Form {...form}>
       <form action={formAction} className="space-y-4">
-        {/* <input type="hidden" value="something" /> */}
         <div className="grid grid-cols-6 gap-2 gap-y-4">
           <FormField
             control={form.control}

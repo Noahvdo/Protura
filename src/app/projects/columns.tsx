@@ -1,9 +1,6 @@
 "use client";
-
-import { Company } from "@/lib/types/company";
 import { cn, sameDay } from "@/lib/utils";
 import type { ColumnDef, Row } from "@tanstack/react-table";
-import parsePhoneNumber from "libphonenumber-js";
 
 import { ArrowUpDown, Delete, MoreHorizontal } from "lucide-react";
 
@@ -16,18 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import React from "react";
 import { DateRange } from "react-day-picker";
 import { deleteCompany } from "@/lib/actions/company/delete";
+import { Project } from "@/lib/types/project";
 
 const exactMatchFilterFn = (
-  row: Row<Company>,
+  row: Row<Project>,
   columnId: string,
   filterValue: any
 ) => {
@@ -43,7 +35,16 @@ const exactMatchFilterFn = (
   return filterValue.some((value: string) => value === cellValue);
 };
 
-export const columns: ColumnDef<Company>[] = [
+export const columns: ColumnDef<Project>[] = [
+  {
+    accessorKey: "projectNo",
+    header: () => {
+      return <span className="ml-2">Project #</span>;
+    },
+    cell: ({ row }) => {
+      return <span className="ml-2">{row.getValue("projectNo")}</span>;
+    },
+  },
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -53,7 +54,7 @@ export const columns: ColumnDef<Company>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       );
     },
@@ -61,10 +62,6 @@ export const columns: ColumnDef<Company>[] = [
       const name = row.getValue<string>("name");
       return <span className="ml-4">{name}</span>;
     },
-  },
-  {
-    accessorKey: "companyNo",
-    header: "Company #",
   },
   {
     accessorKey: "status",
@@ -76,62 +73,16 @@ export const columns: ColumnDef<Company>[] = [
         <span
           className={cn(
             `px-2 py-1 text-xs font-semibold rounded-full capitalize`,
-            status === "active"
-              ? "bg-green-100 text-green-800"
-              : status === "inactive"
-              ? "bg-red-100 text-red-800"
-              : "bg-blue-100 text-blue-800"
+            status === "in_progress" && "bg-yellow-100 text-yellow-800",
+            status === "completed" && "bg-green-100 text-green-800",
+            status === "on_hold" && "bg-red-100 text-red-800",
+            status === "canceled" && "bg-red-100 text-red-800",
+            status === "new" && "bg-blue-100 text-blue-800",
+            status === "archived" && "bg-gray-100 text-gray-800"
           )}
         >
-          {status}
+          {status.replace("_", " ")}
         </span>
-      );
-    },
-  },
-  {
-    accessorKey: "phone",
-    header: "Phone number",
-    cell: ({ row }) => {
-      const rawPhoneNumber = row.getValue<string>("phone");
-      const phoneNumber = parsePhoneNumber(rawPhoneNumber, "NL");
-      const phone = phoneNumber?.formatNational();
-      return (
-        <a href={`tel:${phoneNumber?.number}`}>
-          <span className="text-blue-400">{phone}</span>
-          {phoneNumber?.country !== "NL" && " (International)"}
-        </a>
-      );
-    },
-  },
-  {
-    accessorKey: "invoiceEmail",
-    header: "Invoice Email",
-
-    cell: ({ row }) => {
-      const email = row.getValue<string>("invoiceEmail");
-      return (
-        <TooltipProvider>
-          <Tooltip delayDuration={300}>
-            <TooltipTrigger asChild>
-              <Button
-                variant="link"
-                className="px-0"
-                onClick={() => {
-                  navigator.clipboard.writeText(email);
-                }}
-              >
-                {email}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent
-              side="right"
-              className="bg-card-foreground"
-              forceMount
-            >
-              <p className="font-medium text-card">Click to copy</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
       );
     },
   },
@@ -178,9 +129,10 @@ export const columns: ColumnDef<Company>[] = [
   },
   {
     id: "actions",
+    header: "Actions",
+    size: 100,
     cell: ({ row }) => {
       const company = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -192,19 +144,21 @@ export const columns: ColumnDef<Company>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(company.companyNo)}
+              onClick={() =>
+                navigator.clipboard.writeText(company.projectNo.toString())
+              }
             >
-              Copy company #
+              Copy project #
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View company</DropdownMenuItem>
-            <DropdownMenuItem>View manager</DropdownMenuItem>
+            <DropdownMenuItem>View project</DropdownMenuItem>
+            <DropdownMenuItem>View tasks</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="focus:bg-destructive focus:text-destructive-foreground"
               onClick={() => deleteCompany(company.id)}
             >
-              <Delete className="rotate-180" /> Delete company
+              <Delete className="rotate-180" /> Delete project
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

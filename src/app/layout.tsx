@@ -4,7 +4,6 @@ import Header from "@/components/app-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
 
 const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -23,13 +22,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
-
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased dark`}>
-        <SidebarProvider defaultOpen={defaultOpen}>
+        <SidebarProvider defaultOpen={false}>
           <AppSidebar />
           <div className="w-full">
             <div className="grid grid-rows-[var(--header-height)_auto] h-screen">

@@ -7,7 +7,6 @@ export default async function Page() {
     "http://localhost:8080/companies",
     {}
   ).then((res) => res.json());
-
   return (
     <div>
       <DataTable columns={columns} data={companies} />
